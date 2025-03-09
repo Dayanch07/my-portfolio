@@ -13,24 +13,6 @@ if ($conn->connect_error) {
     exit;
 }
 
-// reCAPTCHA verification
-<?php
-$secretKey = "YOUR_SECRET_KEY"; 
-$responseKey = $_POST['g-recaptcha-response'];
-$remoteIP = $_SERVER['REMOTE_ADDR'];
-
-$googleURL = "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$responseKey&remoteip=$remoteIP";
-$response = file_get_contents($googleURL);
-$responseKeys = json_decode($response, true);
-
-if ($responseKeys["success"]) {
-    echo "reCAPTCHA verified!";
-} else {
-    echo "Failed reCAPTCHA verification.";
-}
-?>
-
-
 // Get form data
 $name = $_POST['name'];
 $email = $_POST['email'];
