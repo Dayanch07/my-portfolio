@@ -14,17 +14,22 @@ if ($conn->connect_error) {
 }
 
 // reCAPTCHA verification
-$recaptchaSecret = '6LcnyuwqAAAAAPjFDYNm2xWTJssUODkXqQZJt2bH';
-$recaptchaResponse = $_POST['g-recaptcha-response'];
+<?php
+$secretKey = "YOUR_SECRET_KEY"; 
+$responseKey = $_POST['g-recaptcha-response'];
+$remoteIP = $_SERVER['REMOTE_ADDR'];
 
-$recaptchaVerifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
-$response = file_get_contents($recaptchaVerifyUrl . "?secret=" . $recaptchaSecret . "&response=" . $recaptchaResponse);
+$googleURL = "https://www.google.com/recaptcha/api/siteverify?secret=$secretKey&response=$responseKey&remoteip=$remoteIP";
+$response = file_get_contents($googleURL);
 $responseKeys = json_decode($response, true);
 
-if (intval($responseKeys["success"]) !== 1) {
-    echo json_encode(['success' => false, 'error' => 'reCAPTCHA verification failed']);
-    exit;
+if ($responseKeys["success"]) {
+    echo "reCAPTCHA verified!";
+} else {
+    echo "Failed reCAPTCHA verification.";
 }
+?>
+
 
 // Get form data
 $name = $_POST['name'];
